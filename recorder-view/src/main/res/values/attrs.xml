@@ -4,6 +4,8 @@
         <attr name="slide_to_cancel_text" format="string" />
         <attr name="cancel_text" format="string" />
         <attr name="tips_text" format="string" />
+        <attr name="tips_text_color" format="color" />
+        <attr name="tips_bg_color" format="color"/>
         <attr name="blink_color" format="color"/>
         <attr name="cancel_text_color" format="color"/>
         <attr name="slide_to_cancel_text_color" format="color"/>

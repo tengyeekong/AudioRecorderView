@@ -6,6 +6,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
+import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
 import android.media.MediaRecorder
 import android.support.v4.app.ActivityCompat
@@ -78,6 +79,8 @@ class AudioRecordView : FrameLayout {
             val slideToCancelText = typedArray.getString(R.styleable.AudioRecordView_slide_to_cancel_text)
             val cancelText = typedArray.getString(R.styleable.AudioRecordView_cancel_text)
             val tipsText = typedArray.getString(R.styleable.AudioRecordView_tips_text)
+            val tipsTextColor = typedArray.getColor(R.styleable.AudioRecordView_tips_text_color, -1)
+            val tipsBgColor = typedArray.getColor(R.styleable.AudioRecordView_tips_bg_color, -1)
             val blinkColor = typedArray.getColor(R.styleable.AudioRecordView_blink_color, -1)
             val cancelTextColor = typedArray.getColor(R.styleable.AudioRecordView_cancel_text_color, -1)
             val slideToCancelTextColor = typedArray.getColor(R.styleable.AudioRecordView_slide_to_cancel_text_color, -1)
@@ -92,6 +95,8 @@ class AudioRecordView : FrameLayout {
             cancelText?.let { slide_panel.setCancelText(it) }
             tipsText?.let { record_tip_tv.text = it }
 
+            if (tipsTextColor != -1) record_tip_tv.setTextColor(tipsTextColor)
+            if (tipsBgColor != -1) record_tip_tv.backgroundTintList = ColorStateList.valueOf(tipsBgColor)
             if (slideToCancelTextColor != -1) slide_panel.setSlideCancelColor(slideToCancelTextColor)
             if (cancelTextColor != -1) slide_panel.setCancelColor(cancelTextColor)
             if (blinkColor != -1) slide_panel.setBlinkColor(blinkColor)
