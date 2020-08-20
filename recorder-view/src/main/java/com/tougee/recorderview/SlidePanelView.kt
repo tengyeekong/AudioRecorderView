@@ -9,6 +9,7 @@ import android.graphics.Color
 import android.support.v4.content.ContextCompat
 import android.support.v7.content.res.AppCompatResources.getColorStateList
 import android.util.AttributeSet
+import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
@@ -38,7 +39,10 @@ class SlidePanelView : RelativeLayout {
             setBounds(0, 0, blinkSize, blinkSize)
         }
         time_tv.setCompoundDrawables(blinkingDrawable, null, null, null)
-        cancel_tv.setOnClickListener { callback?.onCancel() }
+        cancel_tv.setOnClickListener {
+            performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
+            callback?.onCancel()
+        }
         time_tv.text = 0L.formatMillis()
     }
 

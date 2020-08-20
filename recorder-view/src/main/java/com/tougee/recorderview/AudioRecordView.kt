@@ -13,6 +13,7 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.content.res.AppCompatResources
 import android.util.AttributeSet
+import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.view.MotionEvent.ACTION_CANCEL
 import android.view.MotionEvent.ACTION_DOWN
@@ -230,6 +231,7 @@ class AudioRecordView : FrameLayout {
                     return@OnTouchListener false
                 }
 
+                performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
                 originX = event.rawX
                 startX = event.rawX
                 val w = slide_panel.slideWidth
@@ -251,7 +253,10 @@ class AudioRecordView : FrameLayout {
                             record_circle.startTranslation).apply {
                         duration = 150
                         interpolator = DecelerateInterpolator()
-                        doOnEnd { locked = true }
+                        doOnEnd {
+                            performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
+                            locked = true
+                        }
                     }.start()
                     slide_panel.toCancel()
                     return@OnTouchListener false
@@ -261,6 +266,7 @@ class AudioRecordView : FrameLayout {
                 if (moveX != 0f) {
                     slide_panel.slideText(startX - moveX)
                     if (originX - moveX > maxScrollX) {
+                        performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
                         removeCallbacks(recordRunnable)
                         removeCallbacks(checkReadyRunnable)
                         handleCancelOrEnd(true)

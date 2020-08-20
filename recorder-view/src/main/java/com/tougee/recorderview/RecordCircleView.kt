@@ -13,9 +13,9 @@ import android.graphics.drawable.Drawable
 import android.support.v4.content.ContextCompat
 import android.support.v7.content.res.AppCompatResources
 import android.util.AttributeSet
+import android.view.HapticFeedbackConstants
 import android.view.MotionEvent
 import android.view.View
-import kotlinx.android.synthetic.main.view_slide_panel.view.*
 
 class RecordCircleView : View {
 
@@ -157,6 +157,7 @@ class RecordCircleView : View {
             } else if (pressedEnd) {
                 if (event.action == MotionEvent.ACTION_UP) {
                     if (lockBackgroundDrawable.bounds.contains(x, y)) {
+                        performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
                         callback.onCancel()
                     }
                 }
@@ -164,6 +165,7 @@ class RecordCircleView : View {
             } else if (pressedSend) {
                 if (event.action == MotionEvent.ACTION_UP) {
                     if (sendClickBound.contains(x, y)) {
+                        performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
                         callback.onSend()
                     }
                 }
