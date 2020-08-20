@@ -25,6 +25,7 @@ class SlidePanelView : RelativeLayout {
     private var isEnding = false
     private var maxTimeValue = 60 * 10
     private val blinkSize = context.resources.getDimensionPixelSize(R.dimen.blink_size)
+    private var allowHaptic = true
 
     var callback: Callback? = null
 
@@ -40,7 +41,9 @@ class SlidePanelView : RelativeLayout {
         }
         time_tv.setCompoundDrawables(blinkingDrawable, null, null, null)
         cancel_tv.setOnClickListener {
-            performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
+            if (allowHaptic) {
+                performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
+            }
             callback?.onCancel()
         }
         time_tv.text = 0L.formatMillis()
@@ -75,6 +78,10 @@ class SlidePanelView : RelativeLayout {
 
     fun setTimerColor(color: Int) {
         time_tv.setTextColor(color)
+    }
+
+    fun setAllowHaptic(allowHaptic: Boolean) {
+        this.allowHaptic = allowHaptic
     }
 
     fun onStart() {

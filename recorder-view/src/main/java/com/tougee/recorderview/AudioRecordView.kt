@@ -56,6 +56,7 @@ class AudioRecordView : FrameLayout {
     private var upBeforeGrant = false
     private var recorder: MediaRecorder? = null
     private var audioPath = ""
+    private var allowHaptic = true
 
     private val audioDrawable: Drawable by lazy { resources.getDrawable(R.drawable.ic_record_mic_black, null) }
     private val videoDrawable: Drawable by lazy { resources.getDrawable(R.drawable.ic_record_mic_black, null) }
@@ -118,6 +119,12 @@ class AudioRecordView : FrameLayout {
 
     fun setMaxTime(maxTimeValue: Int) {
         slide_panel.setMaxTime(maxTimeValue)
+    }
+
+    fun setAllowHaptic(allowHaptic: Boolean) {
+        this.allowHaptic = allowHaptic
+        slide_panel.setAllowHaptic(allowHaptic)
+        record_circle.setAllowHaptic(allowHaptic)
     }
 
     fun cancelExternal() {
@@ -231,7 +238,9 @@ class AudioRecordView : FrameLayout {
                     return@OnTouchListener false
                 }
 
-                performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
+                if (allowHaptic) {
+                    performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
+                }
                 originX = event.rawX
                 startX = event.rawX
                 val w = slide_panel.slideWidth
@@ -254,7 +263,9 @@ class AudioRecordView : FrameLayout {
                         duration = 150
                         interpolator = DecelerateInterpolator()
                         doOnEnd {
-                            performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
+                            if (allowHaptic) {
+                                performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
+                            }
                             locked = true
                         }
                     }.start()
@@ -266,7 +277,9 @@ class AudioRecordView : FrameLayout {
                 if (moveX != 0f) {
                     slide_panel.slideText(startX - moveX)
                     if (originX - moveX > maxScrollX) {
-                        performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
+                        if (allowHaptic) {
+                            performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
+                        }
                         removeCallbacks(recordRunnable)
                         removeCallbacks(checkReadyRunnable)
                         handleCancelOrEnd(true)

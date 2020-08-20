@@ -55,6 +55,7 @@ class RecordCircleView : View {
     var sendButtonVisible = false
     private var pressedEnd = false
     private var pressedSend = false
+    private var allowHaptic = true
 
     lateinit var callback: Callback
 
@@ -107,6 +108,10 @@ class RecordCircleView : View {
         AppCompatResources.getDrawable(context, iconRes)?.let { sendDrawable = it }
     }
 
+    fun setAllowHaptic(allowHaptic: Boolean) {
+        this.allowHaptic = allowHaptic
+    }
+
     fun setAmplitude(value: Double) {
         animateToAmplitude = Math.min(100.0, value).toFloat() / 100.0f
         animateAmplitudeDiff = (animateToAmplitude - amplitude) / 150.0f
@@ -157,7 +162,9 @@ class RecordCircleView : View {
             } else if (pressedEnd) {
                 if (event.action == MotionEvent.ACTION_UP) {
                     if (lockBackgroundDrawable.bounds.contains(x, y)) {
-                        performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
+                        if (allowHaptic) {
+                            performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
+                        }
                         callback.onCancel()
                     }
                 }
@@ -165,7 +172,9 @@ class RecordCircleView : View {
             } else if (pressedSend) {
                 if (event.action == MotionEvent.ACTION_UP) {
                     if (sendClickBound.contains(x, y)) {
-                        performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
+                        if (allowHaptic) {
+                            performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
+                        }
                         callback.onSend()
                     }
                 }
