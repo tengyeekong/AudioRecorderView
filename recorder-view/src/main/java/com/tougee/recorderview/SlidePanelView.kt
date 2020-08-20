@@ -64,7 +64,7 @@ class SlidePanelView : RelativeLayout {
     }
 
     fun setBlinkColor(color: Int) {
-        blinkingDrawable = BlinkingDrawable(ContextCompat.getColor(context, color)).apply {
+        blinkingDrawable = BlinkingDrawable(color).apply {
             setBounds(0, 0, blinkSize, blinkSize)
         }
     }

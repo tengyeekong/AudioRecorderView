@@ -91,11 +91,11 @@ class RecordCircleView : View {
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     fun setBtnBgColor(color: Int) {
-        colorCircle = ContextCompat.getColor(context, color)
+        colorCircle = color
     }
 
     fun setLockIconColor(color: Int) {
-        colorLock = ContextCompat.getColor(context, color)
+        colorLock = color
     }
 
     fun setMicIcon(iconRes: Int) {
