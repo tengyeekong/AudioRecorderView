@@ -107,7 +107,10 @@ class AudioRecordView : FrameLayout {
             if (timerColor != -1) slide_panel.setTimerColor(timerColor)
 
             if (micIconRes != -1) {
-                AppCompatResources.getDrawable(context, micIconRes)?.let { audioDrawable = it }
+                AppCompatResources.getDrawable(context, micIconRes)?.let {
+                    record_ib.setImageDrawable(it)
+                    audioDrawable = it
+                }
             }
             if (lockedMicIconRes != -1) record_circle.setMicIcon(lockedMicIconRes)
             if (lockedSendIconRes != -1) record_circle.setSendIcon(lockedSendIconRes)
