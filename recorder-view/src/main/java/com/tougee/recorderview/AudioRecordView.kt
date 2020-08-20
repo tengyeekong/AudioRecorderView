@@ -68,7 +68,7 @@ class AudioRecordView : FrameLayout {
     }
 
     private fun init(context: Context, attrs: AttributeSet?, defStyleAttr: Int) {
-        if (attrs != null && defStyleAttr == -1) {
+        if (attrs != null) {
             val typedArray = context.obtainStyledAttributes(
                     attrs, R.styleable.AudioRecordView,
                     defStyleAttr, -1
