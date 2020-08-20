@@ -4,6 +4,16 @@ Simple Audio Recorder View with 'swap-to-cancel' Like Telegram
 
 <img src="art/demo.gif">
 
+
+## Releases:
+
+#### Current release: [![](https://jitpack.io/v/tengyeekong/AudioRecorderView.svg)](https://jitpack.io/#tengyeekong/AudioRecorderView)
+
+
+## Updates:
+Added recorder.
+
+
 ## Usage
 ```xml
 
@@ -34,7 +44,7 @@ Simple Audio Recorder View with 'swap-to-cancel' Like Telegram
 
         override fun isReady() = true
 
-        override fun onRecordEnd() {}
+        override fun onRecordEnd(audioPath: String) {}
 
         override fun onRecordCancel() {}
 
@@ -54,7 +64,7 @@ allprojects {
 Add the dependency:
 ```Gradle
 dependencies {
-    compile 'com.github.tougee:audiorecordview:1.0.0'
+    compile 'com.github.tengyeekong:audiorecordview:1.0.1'
 }
 ```
 
