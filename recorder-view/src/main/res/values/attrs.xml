@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="AudioRecordView">
+        <attr name="slide_to_cancel_text" format="string" />
+        <attr name="cancel_text" format="string" />
+        <attr name="tips_text" format="string" />
         <attr name="blink_color" format="color"/>
+        <attr name="cancel_text_color" format="color"/>
+        <attr name="slide_to_cancel_text_color" format="color"/>
+        <attr name="btn_background_color" format="color"/>
+        <attr name="lock_icon_color" format="color"/>
+        <attr name="timer_color" format="color" />
+        <attr name="mic_icon" format="reference" />
+        <attr name="send_icon" format="reference" />
     </declare-styleable>
 </resources>

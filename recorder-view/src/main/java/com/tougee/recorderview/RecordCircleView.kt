@@ -10,14 +10,16 @@ import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.drawable.Drawable
 import android.support.v4.content.ContextCompat
+import android.support.v7.content.res.AppCompatResources
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import kotlinx.android.synthetic.main.view_slide_panel.view.*
 
 class RecordCircleView : View {
 
-    private val colorCircle: Int by lazy { ContextCompat.getColor(context, R.color.color_record_circle_bg) }
-    private val colorLock: Int by lazy { ContextCompat.getColor(context, R.color.text_gray) }
+    private var colorCircle: Int = ContextCompat.getColor(context, R.color.color_record_circle_bg)
+    private var colorLock: Int = ContextCompat.getColor(context, R.color.text_gray)
     private val colorOrange: Int by lazy { ContextCompat.getColor(context, R.color.color_blink) }
 
     private val paint: Paint by lazy {
@@ -55,8 +57,8 @@ class RecordCircleView : View {
 
     lateinit var callback: Callback
 
-    private val audioDrawable: Drawable by lazy { resources.getDrawable(R.drawable.ic_record_mic_white, null) }
-    private val sendDrawable: Drawable by lazy { resources.getDrawable(R.drawable.ic_send_white_24dp, null) }
+    private var audioDrawable: Drawable = resources.getDrawable(R.drawable.ic_record_mic_white, null)
+    private var sendDrawable: Drawable = resources.getDrawable(R.drawable.ic_send_white_24dp, null)
 
     private val lockDrawable: Drawable by lazy {
         resources.getDrawable(R.drawable.lock_middle, null).apply {
@@ -87,6 +89,22 @@ class RecordCircleView : View {
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+
+    fun setBtnBgColor(color: Int) {
+        colorCircle = ContextCompat.getColor(context, color)
+    }
+
+    fun setLockIconColor(color: Int) {
+        colorLock = ContextCompat.getColor(context, color)
+    }
+
+    fun setMicIcon(iconRes: Int) {
+        AppCompatResources.getDrawable(context, iconRes)?.let { audioDrawable = it }
+    }
+
+    fun setSendIcon(iconRes: Int) {
+        AppCompatResources.getDrawable(context, iconRes)?.let { sendDrawable = it }
+    }
 
     fun setAmplitude(value: Double) {
         animateToAmplitude = Math.min(100.0, value).toFloat() / 100.0f

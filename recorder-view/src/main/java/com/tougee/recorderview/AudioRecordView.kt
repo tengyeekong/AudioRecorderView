@@ -58,6 +58,48 @@ class AudioRecordView : FrameLayout {
         slide_panel.callback = chatSlideCallback
         record_circle.callback = recordCircleCallback
         record_ib.setOnTouchListener(recordOnTouchListener)
+        init(context, attrs, defStyleAttr)
+    }
+
+    private fun init(context: Context, attrs: AttributeSet?, defStyleAttr: Int) {
+        if (attrs != null && defStyleAttr == -1) {
+            val typedArray = context.obtainStyledAttributes(
+                    attrs, R.styleable.AudioRecordView,
+                    defStyleAttr, -1
+            )
+
+            val slideToCancelText = typedArray.getString(R.styleable.AudioRecordView_slide_to_cancel_text)
+            val cancelText = typedArray.getString(R.styleable.AudioRecordView_cancel_text)
+            val tipsText = typedArray.getString(R.styleable.AudioRecordView_tips_text)
+            val blinkColor = typedArray.getColor(R.styleable.AudioRecordView_blink_color, -1)
+            val cancelTextColor = typedArray.getColor(R.styleable.AudioRecordView_cancel_text_color, -1)
+            val slideToCancelTextColor = typedArray.getColor(R.styleable.AudioRecordView_slide_to_cancel_text_color, -1)
+            val btnBackgroundColor = typedArray.getColor(R.styleable.AudioRecordView_btn_background_color, -1)
+            val lockIconColor = typedArray.getColor(R.styleable.AudioRecordView_lock_icon_color, -1)
+            val timerColor = typedArray.getColor(R.styleable.AudioRecordView_timer_color, -1)
+            val micIconRes = typedArray.getResourceId(R.styleable.AudioRecordView_mic_icon, -1)
+            val sendIconRes = typedArray.getResourceId(R.styleable.AudioRecordView_send_icon, -1)
+
+            slideToCancelText?.let { slide_panel.setSlideText(it) }
+            cancelText?.let { slide_panel.setCancelText(it) }
+            tipsText?.let { record_tip_tv.text = it }
+
+            if (slideToCancelTextColor != -1) slide_panel.setSlideCancelColor(slideToCancelTextColor)
+            if (cancelTextColor != -1) slide_panel.setCancelColor(cancelTextColor)
+            if (blinkColor != -1) slide_panel.setBlinkColor(blinkColor)
+            if (btnBackgroundColor != -1) record_circle.setBtnBgColor(btnBackgroundColor)
+            if (lockIconColor != -1) record_circle.setLockIconColor(lockIconColor)
+            if (timerColor != -1) slide_panel.setTimerColor(timerColor)
+
+            if (micIconRes != -1) record_circle.setMicIcon(micIconRes)
+            if (sendIconRes != -1) record_circle.setSendIcon(sendIconRes)
+
+            typedArray.recycle()
+        }
+    }
+
+    fun setMaxTime(maxTimeValue: Int) {
+        slide_panel.setMaxTime(maxTimeValue)
     }
 
     fun cancelExternal() {
@@ -172,7 +214,7 @@ class AudioRecordView : FrameLayout {
                 val x = record_circle.setLockTranslation(event.y)
                 if (x == 2) {
                     ObjectAnimator.ofFloat(record_circle, "lockAnimatedTranslation",
-                        record_circle.startTranslation).apply {
+                            record_circle.startTranslation).apply {
                         duration = 150
                         interpolator = DecelerateInterpolator()
                         doOnEnd { locked = true }
@@ -258,7 +300,7 @@ class AudioRecordView : FrameLayout {
                 }
             } else {
                 if (ContextCompat.checkSelfPermission(activity, (Manifest.permission.RECORD_AUDIO)) != PackageManager.PERMISSION_GRANTED
-                    && ContextCompat.checkSelfPermission(activity, (Manifest.permission.CAMERA)) != PackageManager.PERMISSION_GRANTED) {
+                        && ContextCompat.checkSelfPermission(activity, (Manifest.permission.CAMERA)) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA), 99)
                     return@Runnable
                 }

@@ -7,6 +7,7 @@ import android.animation.ObjectAnimator
 import android.content.Context
 import android.graphics.Color
 import android.support.v4.content.ContextCompat
+import android.support.v7.content.res.AppCompatResources.getColorStateList
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.animation.AccelerateInterpolator
@@ -21,6 +22,8 @@ class SlidePanelView : RelativeLayout {
     private var timeValue = 0
     private var toCanceled = false
     private var isEnding = false
+    private var maxTimeValue = 60 * 10
+    private val blinkSize = context.resources.getDimensionPixelSize(R.dimen.blink_size)
 
     var callback: Callback? = null
 
@@ -31,13 +34,43 @@ class SlidePanelView : RelativeLayout {
         setBackgroundColor(Color.WHITE)
         isClickable = true
 
-        val blinkSize = context.resources.getDimensionPixelSize(R.dimen.blink_size)
         blinkingDrawable = BlinkingDrawable(ContextCompat.getColor(context, R.color.color_blink)).apply {
             setBounds(0, 0, blinkSize, blinkSize)
         }
         time_tv.setCompoundDrawables(blinkingDrawable, null, null, null)
         cancel_tv.setOnClickListener { callback?.onCancel() }
         time_tv.text = 0L.formatMillis()
+    }
+
+    fun setMaxTime(newMaxTimeValue: Int) {
+        maxTimeValue = newMaxTimeValue
+    }
+
+    fun setSlideText(text: String) {
+        slide_cancel.text = text
+    }
+
+    fun setCancelText(text: String) {
+        cancel_tv.text = text
+    }
+
+    fun setSlideCancelColor(color: Int) {
+        slide_cancel.setTextColor(color)
+        slide_cancel_arrow.imageTintList = getColorStateList(context, color)
+    }
+
+    fun setCancelColor(color: Int) {
+        cancel_tv.setTextColor(color)
+    }
+
+    fun setBlinkColor(color: Int) {
+        blinkingDrawable = BlinkingDrawable(ContextCompat.getColor(context, color)).apply {
+            setBounds(0, 0, blinkSize, blinkSize)
+        }
+    }
+
+    fun setTimerColor(color: Int) {
+        time_tv.setTextColor(color)
     }
 
     fun onStart() {
@@ -54,8 +87,8 @@ class SlidePanelView : RelativeLayout {
             })
         }
         animSet.playTogether(
-            ObjectAnimator.ofFloat(this, "translationX", 0f),
-            ObjectAnimator.ofFloat(this, "alpha", 1f)
+                ObjectAnimator.ofFloat(this, "translationX", 0f),
+                ObjectAnimator.ofFloat(this, "alpha", 1f)
         )
         animSet.start()
     }
@@ -85,10 +118,10 @@ class SlidePanelView : RelativeLayout {
             interpolator = DecelerateInterpolator()
         }
         animSet.playTogether(
-            ObjectAnimator.ofFloat(slide_ll, "alpha", 0f),
-            ObjectAnimator.ofFloat(slide_ll, "translationY", context.dip(20f)),
-            ObjectAnimator.ofFloat(cancel_tv, "alpha", 1f),
-            ObjectAnimator.ofFloat(cancel_tv, "translationY", -context.dip(20f), 0f)
+                ObjectAnimator.ofFloat(slide_ll, "alpha", 0f),
+                ObjectAnimator.ofFloat(slide_ll, "translationY", context.dip(20f)),
+                ObjectAnimator.ofFloat(cancel_tv, "alpha", 1f),
+                ObjectAnimator.ofFloat(cancel_tv, "translationY", -context.dip(20f), 0f)
         )
         animSet.start()
         toCanceled = true
@@ -112,8 +145,8 @@ class SlidePanelView : RelativeLayout {
             })
         }
         animSet.playTogether(
-            ObjectAnimator.ofFloat(this, "translationX", measuredWidth.toFloat()),
-            ObjectAnimator.ofFloat(this, "alpha", 0f)
+                ObjectAnimator.ofFloat(this, "translationX", measuredWidth.toFloat()),
+                ObjectAnimator.ofFloat(this, "alpha", 0f)
         )
         animSet.start()
     }
@@ -134,7 +167,7 @@ class SlidePanelView : RelativeLayout {
 
     private val updateTimeRunnable: Runnable by lazy {
         Runnable {
-            if (timeValue > 59) {
+            if (timeValue > maxTimeValue) {
                 callback?.onTimeout()
                 return@Runnable
             }
