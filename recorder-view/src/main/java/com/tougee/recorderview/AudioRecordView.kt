@@ -7,6 +7,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
+import android.media.MediaRecorder
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
@@ -21,6 +22,9 @@ import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.widget.FrameLayout
 import kotlinx.android.synthetic.main.view_audio_record.view.*
+import java.io.File
+import java.text.SimpleDateFormat
+import java.util.*
 
 class AudioRecordView : FrameLayout {
 
@@ -47,6 +51,8 @@ class AudioRecordView : FrameLayout {
 
     private var isRecording = false
     private var upBeforeGrant = false
+    private var recorder: MediaRecorder? = null
+    private var audioPath = ""
 
     private val audioDrawable: Drawable by lazy { resources.getDrawable(R.drawable.ic_record_mic_black, null) }
     private val videoDrawable: Drawable by lazy { resources.getDrawable(R.drawable.ic_record_mic_black, null) }
@@ -125,8 +131,25 @@ class AudioRecordView : FrameLayout {
         record_ib.setImageDrawable(d)
     }
 
+    private fun startRecording() {
+        recorder = MediaRecorder()
+        RecorderManager.recordAudio(recorder!!, file().absolutePath)
+    }
+
+    private fun file(): File {
+        @SuppressLint("SimpleDateFormat")
+        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+//        val file =
+//            File(Environment.getExternalStorageDirectory().toString() + "/Download/$timeStamp.m4a")
+        val file = File(context.cacheDir.absolutePath, "$timeStamp.m4a")
+        audioPath = file.path
+        return file
+    }
+
     private fun handleCancelOrEnd(cancel: Boolean) {
-        if (cancel) callback.onRecordCancel() else callback.onRecordEnd()
+        recorder?.let { RecorderManager.stopRecord(it) }
+        recorder = null
+        if (cancel) callback.onRecordCancel() else callback.onRecordEnd(audioPath)
         cleanUp()
         updateRecordCircleAndSendIcon()
     }
@@ -294,8 +317,9 @@ class AudioRecordView : FrameLayout {
             post(hideRecordTipRunnable)
 
             if (recordIconStatus == AUDIO) {
-                if (ContextCompat.checkSelfPermission(activity, (Manifest.permission.RECORD_AUDIO)) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.RECORD_AUDIO), 99)
+                if (ContextCompat.checkSelfPermission(activity, (Manifest.permission.RECORD_AUDIO)) != PackageManager.PERMISSION_GRANTED
+                        && ContextCompat.checkSelfPermission(activity, (Manifest.permission.WRITE_EXTERNAL_STORAGE)) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE), 99)
                     return@Runnable
                 }
             } else {
@@ -305,6 +329,7 @@ class AudioRecordView : FrameLayout {
                     return@Runnable
                 }
             }
+            startRecording()
             callback.onRecordStart(recordIconStatus == AUDIO)
             upBeforeGrant = false
             post(checkReadyRunnable)
@@ -350,9 +375,9 @@ class AudioRecordView : FrameLayout {
     }
 
     interface Callback {
-        fun onRecordStart(audio: Boolean)
         fun isReady(): Boolean
-        fun onRecordEnd()
+        fun onRecordStart(audio: Boolean)
         fun onRecordCancel()
+        fun onRecordEnd(audioPath: String)
     }
 }
