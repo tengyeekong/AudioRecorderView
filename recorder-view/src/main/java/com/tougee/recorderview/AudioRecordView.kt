@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable
 import android.media.MediaRecorder
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
+import android.support.v7.content.res.AppCompatResources
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.MotionEvent.ACTION_CANCEL
@@ -84,7 +85,8 @@ class AudioRecordView : FrameLayout {
             val lockIconColor = typedArray.getColor(R.styleable.AudioRecordView_lock_icon_color, -1)
             val timerColor = typedArray.getColor(R.styleable.AudioRecordView_timer_color, -1)
             val micIconRes = typedArray.getResourceId(R.styleable.AudioRecordView_mic_icon, -1)
-            val sendIconRes = typedArray.getResourceId(R.styleable.AudioRecordView_send_icon, -1)
+            val lockedMicIconRes = typedArray.getResourceId(R.styleable.AudioRecordView_locked_mic_icon, -1)
+            val lockedSendIconRes = typedArray.getResourceId(R.styleable.AudioRecordView_locked_send_icon, -1)
 
             slideToCancelText?.let { slide_panel.setSlideText(it) }
             cancelText?.let { slide_panel.setCancelText(it) }
@@ -97,8 +99,12 @@ class AudioRecordView : FrameLayout {
             if (lockIconColor != -1) record_circle.setLockIconColor(lockIconColor)
             if (timerColor != -1) slide_panel.setTimerColor(timerColor)
 
-            if (micIconRes != -1) record_circle.setMicIcon(micIconRes)
-            if (sendIconRes != -1) record_circle.setSendIcon(sendIconRes)
+            if (micIconRes != -1) {
+                val slideArrow = AppCompatResources.getDrawable(context, micIconRes)
+                record_ib.setImageDrawable(slideArrow)
+            }
+            if (lockedMicIconRes != -1) record_circle.setMicIcon(lockedMicIconRes)
+            if (lockedSendIconRes != -1) record_circle.setSendIcon(lockedSendIconRes)
 
             typedArray.recycle()
         }

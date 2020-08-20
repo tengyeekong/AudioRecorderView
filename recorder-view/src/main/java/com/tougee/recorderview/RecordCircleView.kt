@@ -1,5 +1,6 @@
 package com.tougee.recorderview
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
@@ -36,7 +37,7 @@ class RecordCircleView : View {
 
     private val rect = RectF()
     private var sendClickBound = Rect()
-    var scale = 0f
+    private var scale = 0f
         set(value) {
             field = value
             invalidate()
@@ -45,7 +46,7 @@ class RecordCircleView : View {
     private var animateToAmplitude = 0f
     private var animateAmplitudeDiff = 0f
     private var lastUpdateTime = 0L
-    var lockAnimatedTranslation = 0f
+    private var lockAnimatedTranslation = 0f
         set(value) {
             field = value
             invalidate()
@@ -142,6 +143,7 @@ class RecordCircleView : View {
         return 1
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
         if (sendButtonVisible) {
             val x = event.x.toInt()
@@ -186,15 +188,19 @@ class RecordCircleView : View {
 
         val sc: Float
         val alpha: Float
-        if (scale <= 0.5f) {
-            sc = scale / 0.5f
-            alpha = sc
-        } else if (scale <= 0.75f) {
-            sc = 1.0f - (scale - 0.5f) / 0.25f * 0.1f
-            alpha = 1f
-        } else {
-            sc = 0.9f + (scale - 0.75f) / 0.25f * 0.1f
-            alpha = 1f
+        when {
+            scale <= 0.5f -> {
+                sc = scale / 0.5f
+                alpha = sc
+            }
+            scale <= 0.75f -> {
+                sc = 1.0f - (scale - 0.5f) / 0.25f * 0.1f
+                alpha = 1f
+            }
+            else -> {
+                sc = 0.9f + (scale - 0.75f) / 0.25f * 0.1f
+                alpha = 1f
+            }
         }
         val dt = System.currentTimeMillis() - lastUpdateTime
         if (animateToAmplitude != amplitude) {

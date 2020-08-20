@@ -11,6 +11,7 @@
         <attr name="lock_icon_color" format="color"/>
         <attr name="timer_color" format="color" />
         <attr name="mic_icon" format="reference" />
-        <attr name="send_icon" format="reference" />
+        <attr name="locked_mic_icon" format="reference" />
+        <attr name="locked_send_icon" format="reference" />
     </declare-styleable>
 </resources>
