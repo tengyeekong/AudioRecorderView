@@ -62,6 +62,5 @@
         android:drawablePadding="@dimen/padding8"
         android:gravity="center_vertical"
         android:textColor="@android:color/black"
-        android:typeface="monospace"
         tools:ignore="RelativeOverlap" />
 </merge>

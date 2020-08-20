@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/chat_control_height"
         android:layout_gravity="bottom"
-        android:visibility="gone" />
+        android:visibility="invisible" />
 
     <com.tougee.recorderview.RecordCircleView
         android:id="@+id/record_circle"
@@ -28,7 +28,7 @@
         android:layout_height="194dp"
         android:layout_gravity="end|bottom"
         android:translationX="36dp"
-        android:visibility="gone" />
+        android:visibility="invisible" />
 
     <TextView
         android:id="@+id/record_tip_tv"

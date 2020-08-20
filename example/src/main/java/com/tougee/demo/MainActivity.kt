@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity(), AudioRecordView.Callback {
 
     override fun isReady() = true
 
-    override fun onRecordEnd() {
+    override fun onRecordEnd(audioPath: String) {
         toast("onEnd")
         audioRecord?.stop()
 
