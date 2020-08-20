@@ -44,8 +44,8 @@ class MainActivity : AppCompatActivity(), AudioRecordView.Callback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         record_view.activity = this
-        file_tv.text = "path: ${file.absolutePath}\nlength: ${file.length()}"
         record_view.callback = this
+        file_tv.text = "path: ${file.absolutePath}\nlength: ${file.length()}"
         play_iv.setOnClickListener {
             if (audioPlayer != null && audioPlayer!!.isPlaying) {
                 play_iv.setImageResource(R.drawable.ic_play_arrow_black_24dp)

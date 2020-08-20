@@ -107,7 +107,7 @@ class SlidePanelView : RelativeLayout {
     val slideWidth by lazy {
         val location = IntArray(2)
         slide_ll.getLocationOnScreen(location)
-        location[0] - context.dip(64f)
+        location[0].toFloat() //- context.dip(64f)
     }
 
     fun slideText(x: Float) {
