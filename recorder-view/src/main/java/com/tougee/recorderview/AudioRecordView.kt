@@ -58,7 +58,7 @@ class AudioRecordView : FrameLayout {
     private var audioPath = ""
     private var allowHaptic = true
 
-    private val audioDrawable: Drawable by lazy { resources.getDrawable(R.drawable.ic_record_mic_black, null) }
+    private var audioDrawable: Drawable = resources.getDrawable(R.drawable.ic_record_mic_black, null)
     private val videoDrawable: Drawable by lazy { resources.getDrawable(R.drawable.ic_record_mic_black, null) }
 
     constructor(context: Context) : this(context, null)
@@ -107,8 +107,7 @@ class AudioRecordView : FrameLayout {
             if (timerColor != -1) slide_panel.setTimerColor(timerColor)
 
             if (micIconRes != -1) {
-                val slideArrow = AppCompatResources.getDrawable(context, micIconRes)
-                record_ib.setImageDrawable(slideArrow)
+                AppCompatResources.getDrawable(context, micIconRes)?.let { audioDrawable = it }
             }
             if (lockedMicIconRes != -1) record_circle.setMicIcon(lockedMicIconRes)
             if (lockedSendIconRes != -1) record_circle.setSendIcon(lockedSendIconRes)
