@@ -28,6 +28,7 @@ import kotlinx.android.synthetic.main.view_audio_record.view.*
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.abs
 
 class AudioRecordView : FrameLayout {
 
@@ -224,8 +225,13 @@ class AudioRecordView : FrameLayout {
         }
     }
 
-    private var startX = 0f
     private var originX = 0f
+    private var originY = 0f
+    private var startX = 0f
+    private var startY = 0f
+    private var isVertical = false
+    private var isHorizontal = false
+    private var orientationDiff = 100f
     private var startTime = 0L
     private var triggeredCancel = false
     private var hasStartRecord = false
@@ -244,7 +250,9 @@ class AudioRecordView : FrameLayout {
                     performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
                 }
                 originX = event.rawX
+                originY = event.rawY
                 startX = event.rawX
+                startY = event.rawY
                 val w = slide_panel.slideWidth
                 if (w > 0) {
                     maxScrollX = w
@@ -258,39 +266,54 @@ class AudioRecordView : FrameLayout {
             ACTION_MOVE -> {
                 if (record_circle.sendButtonVisible || !hasStartRecord) return@OnTouchListener false
 
-                val x = record_circle.setLockTranslation(event.y)
-                if (x == 2) {
-                    ObjectAnimator.ofFloat(record_circle, "lockAnimatedTranslation",
-                            record_circle.startTranslation).apply {
-                        duration = 150
-                        interpolator = DecelerateInterpolator()
-                        doOnEnd {
-                            if (allowHaptic) {
-                                performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
-                            }
-                            locked = true
-                        }
-                    }.start()
-                    slide_panel.toCancel()
-                    return@OnTouchListener false
+                val xDiff = abs(event.rawX - originX)
+                val yDiff = abs(event.rawY - originY)
+                if (xDiff < orientationDiff && yDiff < orientationDiff) {
+                    isHorizontal = false
+                    isVertical = false
                 }
 
-                val moveX = event.rawX
-                if (moveX != 0f) {
-                    slide_panel.slideText(startX - moveX)
-                    if (originX - moveX > maxScrollX) {
-                        if (allowHaptic) {
-                            performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
-                        }
-                        removeCallbacks(recordRunnable)
-                        removeCallbacks(checkReadyRunnable)
-                        handleCancelOrEnd(true)
-                        slide_panel.parent.requestDisallowInterceptTouchEvent(false)
-                        triggeredCancel = true
+                if (!isHorizontal) {
+                    if (yDiff >= orientationDiff) isVertical = true
+
+                    val lockStatus = record_circle.setLockTranslation(event.y)
+                    if (lockStatus == 2) {
+                        ObjectAnimator.ofFloat(record_circle, "lockAnimatedTranslation",
+                                record_circle.startTranslation).apply {
+                            duration = 150
+                            interpolator = DecelerateInterpolator()
+                            doOnEnd {
+                                if (allowHaptic) {
+                                    performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
+                                }
+                                locked = true
+                            }
+                        }.start()
+                        slide_panel.toCancel()
                         return@OnTouchListener false
                     }
                 }
-                startX = moveX
+
+                if (!isVertical) {
+                    if (xDiff >= orientationDiff) isHorizontal = true
+
+                    val moveX = event.rawX
+                    if (moveX != 0f) {
+                        slide_panel.slideText(startX - moveX)
+                        if (originX - moveX > maxScrollX) {
+                            if (allowHaptic) {
+                                performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
+                            }
+                            removeCallbacks(recordRunnable)
+                            removeCallbacks(checkReadyRunnable)
+                            handleCancelOrEnd(true)
+                            slide_panel.parent.requestDisallowInterceptTouchEvent(false)
+                            triggeredCancel = true
+                            return@OnTouchListener false
+                        }
+                    }
+                    startX = moveX
+                }
             }
             ACTION_UP, ACTION_CANCEL -> {
                 if (triggeredCancel) {

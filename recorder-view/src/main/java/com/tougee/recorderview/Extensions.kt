@@ -74,10 +74,10 @@ fun Animator.doOnEnd(action: (animator: Animator) -> Unit) = addListener(onEnd =
  * Add a listener to this Animator using the provided actions.
  */
 fun Animator.addListener(
-    onEnd: ((animator: Animator) -> Unit)? = null,
-    onStart: ((animator: Animator) -> Unit)? = null,
-    onCancel: ((animator: Animator) -> Unit)? = null,
-    onRepeat: ((animator: Animator) -> Unit)? = null
+        onEnd: ((animator: Animator) -> Unit)? = null,
+        onStart: ((animator: Animator) -> Unit)? = null,
+        onCancel: ((animator: Animator) -> Unit)? = null,
+        onRepeat: ((animator: Animator) -> Unit)? = null
 ): Animator.AnimatorListener {
     val listener = object : Animator.AnimatorListener {
         override fun onAnimationRepeat(animator: Animator) {
