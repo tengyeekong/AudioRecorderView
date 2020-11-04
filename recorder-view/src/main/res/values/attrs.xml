@@ -9,9 +9,10 @@
         <attr name="blink_color" format="color"/>
         <attr name="cancel_text_color" format="color"/>
         <attr name="slide_to_cancel_text_color" format="color"/>
-        <attr name="btn_background_color" format="color"/>
+        <attr name="btn_bg_color" format="color" />
         <attr name="lock_icon_color" format="color"/>
         <attr name="timer_color" format="color" />
+        <attr name="panel_bg_color" format="color" />
         <attr name="mic_icon" format="reference" />
         <attr name="locked_mic_icon" format="reference" />
         <attr name="locked_send_icon" format="reference" />

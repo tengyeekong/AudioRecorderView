@@ -15,10 +15,7 @@ import android.support.v7.content.res.AppCompatResources
 import android.util.AttributeSet
 import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
-import android.view.MotionEvent.ACTION_CANCEL
-import android.view.MotionEvent.ACTION_DOWN
-import android.view.MotionEvent.ACTION_MOVE
-import android.view.MotionEvent.ACTION_UP
+import android.view.MotionEvent.*
 import android.view.View
 import android.view.View.OnTouchListener
 import android.view.animation.AccelerateInterpolator
@@ -87,9 +84,10 @@ class AudioRecordView : FrameLayout {
             val blinkColor = typedArray.getColor(R.styleable.AudioRecordView_blink_color, -1)
             val cancelTextColor = typedArray.getColor(R.styleable.AudioRecordView_cancel_text_color, -1)
             val slideToCancelTextColor = typedArray.getColor(R.styleable.AudioRecordView_slide_to_cancel_text_color, -1)
-            val btnBackgroundColor = typedArray.getColor(R.styleable.AudioRecordView_btn_background_color, -1)
+            val btnBgColor = typedArray.getColor(R.styleable.AudioRecordView_btn_bg_color, -1)
             val lockIconColor = typedArray.getColor(R.styleable.AudioRecordView_lock_icon_color, -1)
             val timerColor = typedArray.getColor(R.styleable.AudioRecordView_timer_color, -1)
+            val panelBgColor = typedArray.getColor(R.styleable.AudioRecordView_panel_bg_color, -1)
             val micIconRes = typedArray.getResourceId(R.styleable.AudioRecordView_mic_icon, -1)
             val lockedMicIconRes = typedArray.getResourceId(R.styleable.AudioRecordView_locked_mic_icon, -1)
             val lockedSendIconRes = typedArray.getResourceId(R.styleable.AudioRecordView_locked_send_icon, -1)
@@ -103,9 +101,10 @@ class AudioRecordView : FrameLayout {
             if (slideToCancelTextColor != -1) slide_panel.setSlideCancelColor(slideToCancelTextColor)
             if (cancelTextColor != -1) slide_panel.setCancelColor(cancelTextColor)
             if (blinkColor != -1) slide_panel.setBlinkColor(blinkColor)
-            if (btnBackgroundColor != -1) record_circle.setBtnBgColor(btnBackgroundColor)
+            if (btnBgColor != -1) record_circle.setBtnBgColor(btnBgColor)
             if (lockIconColor != -1) record_circle.setLockIconColor(lockIconColor)
             if (timerColor != -1) slide_panel.setTimerColor(timerColor)
+            if (panelBgColor != -1) slide_panel.setPanelBgColor(panelBgColor)
 
             if (micIconRes != -1) {
                 AppCompatResources.getDrawable(context, micIconRes)?.let {

@@ -12,8 +12,7 @@ import android.support.v4.view.ViewPropertyAnimatorListener
 import android.view.Gravity
 import android.view.View
 import android.widget.Toast
-import java.util.Formatter
-import java.util.Locale
+import java.util.*
 
 fun Context.dip(value: Float): Float = (value * resources.displayMetrics.density)
 
@@ -118,13 +117,13 @@ fun View.fadeOut(duration: Long, delay: Long = 0) {
     this.alpha = 1f
     ViewCompat.animate(this).alpha(0f).setStartDelay(delay).setDuration(duration).setListener(object : ViewPropertyAnimatorListener {
         override fun onAnimationStart(view: View) {
-            view.isDrawingCacheEnabled = true
+//            view.isDrawingCacheEnabled = true
         }
 
         override fun onAnimationEnd(view: View) {
             view.visibility = View.INVISIBLE
             view.alpha = 0f
-            view.isDrawingCacheEnabled = false
+//            view.isDrawingCacheEnabled = false
         }
 
         override fun onAnimationCancel(view: View) {}

@@ -2,13 +2,7 @@ package com.tougee.recorderview
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
-import android.graphics.Rect
-import android.graphics.RectF
+import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.support.v4.content.ContextCompat
 import android.support.v7.content.res.AppCompatResources
@@ -16,6 +10,8 @@ import android.util.AttributeSet
 import android.view.HapticFeedbackConstants
 import android.view.MotionEvent
 import android.view.View
+import kotlin.math.max
+import kotlin.math.min
 
 class RecordCircleView : View {
 
@@ -113,7 +109,7 @@ class RecordCircleView : View {
     }
 
     fun setAmplitude(value: Double) {
-        animateToAmplitude = Math.min(100.0, value).toFloat() / 100.0f
+        animateToAmplitude = min(100.0, value).toFloat() / 100.0f
         animateAmplitudeDiff = (animateToAmplitude - amplitude) / 150.0f
         lastUpdateTime = System.currentTimeMillis()
         invalidate()
@@ -190,7 +186,7 @@ class RecordCircleView : View {
         var yAdd = 0f
 
         if (lockAnimatedTranslation != 10000f) {
-            yAdd = Math.max(0f, startTranslation - lockAnimatedTranslation)
+            yAdd = max(0f, startTranslation - lockAnimatedTranslation)
             if (yAdd > context.dipInt(57f)) {
                 yAdd = context.dipInt(57f).toFloat()
             }
@@ -243,7 +239,7 @@ class RecordCircleView : View {
         drawable.draw(canvas)
 
         val moveProgress = 1.0f - yAdd / context.dipInt(57f)
-        val moveProgress2 = Math.max(0.0f, 1.0f - yAdd / context.dipInt(57f) * 2)
+        val moveProgress2 = max(0.0f, 1.0f - yAdd / context.dipInt(57f) * 2)
         val lockSize: Int
         val lockY: Int
         val lockTopY: Int

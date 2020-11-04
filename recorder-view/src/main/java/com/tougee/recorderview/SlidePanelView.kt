@@ -80,6 +80,10 @@ class SlidePanelView : RelativeLayout {
         time_tv.setTextColor(color)
     }
 
+    fun setPanelBgColor(color: Int) {
+        cancel_fl.setBackgroundColor(color)
+    }
+
     fun setAllowHaptic(allowHaptic: Boolean) {
         this.allowHaptic = allowHaptic
     }
